@@ -1,0 +1,14 @@
+%pylab inline
+def gradient(h,x):
+    eps=1e-8 
+    hx=h(x)
+    gr=zeros(size(x))
+    for i in range (size(x)):
+        v=zeros(size(x))
+        v[i]=eps
+        gr[i]=(h(x+v)-hx)/eps
+        return gr
+def g(x):
+    return x[0]**2+2*x[1]**2
+sol= gradient(g,[1,1])
+print(sol)
