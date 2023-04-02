@@ -1,4 +1,7 @@
 %pylab inline
+
+**méthode de descente de gradient**
+
 def gradient(h,x):
     eps=1e-8 
     hx=h(x)
@@ -8,7 +11,55 @@ def gradient(h,x):
         v[i]=eps
         gr[i]=(h(x+v)-hx)/eps
         return gr
+
 def g(x):
     return x[0]**2+2*x[1]**2
+
 sol= gradient(g,[1,1])
 print(sol)
+
+**méthode de descente de gradient à pas constant**
+
+def f(X):
+    return 4*X[0]**2+X[1]**2
+   
+aX0=linspace(-3,3)
+aX1=linspace(-3,3)
+Z=array([[f([x0,x1]) for x0 in aX0] for x1 in aX1])
+contour(aX0,aX1,Z,30)
+show()
+
+epsilon=1e-8
+def gradient(f,x):
+   fx=f(x)
+   grad=zeros(size(x))
+   for i in range(size(x)):
+       veps=zeros(size(x))
+       veps[i]+=epsilon
+       grad[i]=(f(x+veps)-fx)/epsilon
+    return grad
+    
+def methodePasconstant(f,X0,alpha,tol,N=200):
+   l=[X0]
+   X=X0
+   g=gradient(f,X0)
+   n=0
+   while norm(g)>tol and n<=N:
+       n+=1
+       X=X-alpha*g
+       g=gradient(f,X)
+       l.append(X)
+   return l
+   
+l=methodePasconstant(f,[3,3],.2,1e-5)
+lx0=[X[0] for X in l]
+lx1=[X[1] for X in l]
+aX0=linspace(-3,3)
+aX1=linspace(-3,3)
+Z=array([[f([x0,x1]) for x0 in aX0] for x1 in aX1])
+contour(aX0,aX1,Z,30)
+plot(lx0,lx1,'-ro')
+show()
+semilogy([norm(X) for X in l])
+show()
+
